@@ -1,27 +1,111 @@
-# Learning Soccer Skills for Humanoid Robots
+<p align="center">
+<h1 align="center"><strong>Learning Soccer Skills for Humanoid Robots</strong></h1>
+<h3 align="center">A Progressive Perception-Action Framework</h3>
+<p align="center">
+<a href="https://kongjipeng.github.io/" target="_blank">Jipeng Kong<sup>*</sup></a>,
+<a href="https://xinzheliu.github.io/" target="_blank">Xinzhe Liu<sup>*</sup></a>,
+Yuhang Lin,
+<a href="https://bwrooney82.github.io/" target="_blank">Jinrui Han</a>,
+<a href="https://sist.shanghaitech.edu.cn/soerensch_en/main.htm" target="_blank">Sören Schwertfeger<a>,
+<a href="https://baichenjia.github.io/" target="_blank">Chenjia Bai<sup>&dagger;</sup></a>,
+<a href="https://scholar.google.com.hk/citations?user=ahUibskAAAAJ" target="_blank">Xuelong Li<sup>&dagger;</sup></a>
+<br>
+<sup>*</sup> First Author &nbsp;&nbsp; <sup>&dagger;</sup> Corresponding Author
+</p>
+</p>
 
-### A Progressive Perception-Action Framework (PAiD)
+<div id="top" align="center">
 
-**Authors:**  
-Jipeng Kong, Xinzhe Liu, Yuhang Lin, Jinrui Han, Sören Schwertfeger, Chenjia Bai, Xuelong Li
+[![Project](https://img.shields.io/badge/Project-Page-lightblue)](https://soccer-humanoid.github.io/)
+[![arXiv](https://img.shields.io/badge/arXiv-2602.05310-A42C25?style=flat&logo=arXiv&logoColor=A42C25)](https://arxiv.org/abs/2602.05310)
+[![PDF](https://img.shields.io/badge/Paper-PDF-yellow?style=flat&logo=arXiv&logoColor=yellow)](https://soccer-humanoid.github.io/static/Soccer_arxiv.pdf)
+[![Code](https://img.shields.io/badge/Code-GitHub-black?style=flat&logo=github)](https://github.com/TeleHuman/HumanoidSoccer)
 
-📄 Project Page: [https://soccer-humanoid.github.io/](https://soccer-humanoid.github.io/)
-
----
+</div>
 
 ## Overview
 
-This repository is for the paper **Learning Soccer Skills for Humanoid Robots: A Progressive Perception-Action Framework**.
+This repository contains the official implementation for **Learning Soccer Skills for Humanoid Robots: A Progressive Perception-Action Framework **.
 
 Soccer is a challenging task for humanoid robots, requiring tightly integrated perception and whole-body control. We propose **PAiD (Perception-Action integrated Decision-making)**, a progressive framework with three stages: motion-skill acquisition via human motion tracking, lightweight perception-action integration for positional generalization, and physics-aware sim-to-real transfer. Experiments on the **Unitree G1** show robust, human-like kicking across static/rolling balls, varied positions, disturbances, and indoor/outdoor scenarios.
 
----
+[![teaser](media/teaser.png "teaser")]()
 
-## Code Release
+## Codebase
 
-We are preparing the official release, and the code will be published in this repository.
+This repository contains:
+- Core task/environment code: [`source/whole_body_tracking/soccer`](source/whole_body_tracking/soccer)
+- Training & play scripts: [`scripts/rsl_rl`](scripts/rsl_rl)
+- Motion datasets and labels: [`motions`](motions) 
 
----
+The kick motions used in our paper are publicly released in [`motions`](motions).
+
+
+
+## Installation
+
+- Install Isaac Lab **v2.1.1** by following
+  the [installation guide](https://isaac-sim.github.io/IsaacLab/v2.1.1/source/setup/installation/pip_installation.html). We recommend 
+  using the Pip installation.
+
+- Clone this repository:
+
+```bash
+# Option 1: SSH
+git clone git@github.com:TeleHuman/HumanoidSoccer.git
+
+# Option 2: HTTPS
+git clone https://github.com/TeleHuman/HumanoidSoccer.git
+```
+
+- Using a Python interpreter that has Isaac Lab installed, install the library
+
+```bash
+pip install -e source/whole_body_tracking
+```
+
+## Training & Play Example
+### Training
+```bash
+python scripts/rsl_rl/train_multi.py --task Tracking-Flat-G1-SoccerDestination-RNN-v0 \
+    --motion_path motions/soccer-motions \
+    --num_envs 4096 \
+    --headless
+```
+### Play
+```bash
+python scripts/rsl_rl/play_multi.py --task Tracking-Flat-G1-SoccerDestination-RNN-v0 \
+    --motion_path motions/soccer-motions \
+    --num_envs 1  
+```
+
+## Progressive Training & Play
+### Training
+```bash
+python scripts/rsl_rl/train_multi.py --task Tracking-Terrain-G1-RNN-v0 \
+    --motion_path motions/soccer-motions \
+    --run_name test \
+    --num_envs 4096 \
+    --headless 
+```
+
+```bash
+python scripts/rsl_rl/train_multi.py --task Tracking-Flat-G1-SoccerDestination-RNN-v0 \
+    --motion_path motions/soccer-motions \
+    --load_run {run_name} \
+    --run_name test_resume \
+    --num_envs 4096 \
+    --resume True \
+    --headless 
+```
+### Play
+```bash
+python scripts/rsl_rl/play_multi.py --task Tracking-Flat-G1-SoccerDestination-RNN-v0 \
+    --motion_path motions/soccer-motions \
+    --num_envs 1  
+```
+
+##
 
 ## Citation
 
@@ -39,8 +123,13 @@ If you find this work useful in your research, please consider citing:
 }
 ```
 
----
+## License
+
+This codebase is under [CC BY-NC 4.0 license](https://creativecommons.org/licenses/by-nc/4.0/deed.en). You may not use the material for commercial purposes, e.g., to make demos to advertise your commercial products.
 
 ## Contact
 
-For questions or collaborations, please open an issue or contact the authors.
+For further collaborations or discussions, please feel free to reach out to:
+
+- First Author: Jipeng Kong [kongjp2024@shanghaitech.edu.cn](mailto:kongjp2024@shanghaitech.edu.cn) , Xinzhe Liu [liuxzh2023@shanghaitech.edu.cn](mailto:liuxzh2023@shanghaitech.edu.cn).
+- Corresponding Author (Chenjia Bai): [baicj@chinatelecom.cn](mailto:baicj@chinatelecom.cn)
